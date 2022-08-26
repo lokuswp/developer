@@ -1,0 +1,19 @@
+{
+  "name": "lokusWP",
+  "version": "0.0.1",
+  "description": "lokusWP Developer Guide",
+  "main": "index.js",
+  "authors": {
+    "name": "lokusWP",
+    "email": "lokuswp@gmail.com"
+  },
+  "repository": "developer/lokusWP",
+  "scripts": {
+    "dev": "vuepress dev src",
+    "build": "vuepress build src"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.5.3"
+  }
+}
