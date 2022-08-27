@@ -1,14 +1,21 @@
-const { description } = require('../../package')
+const {
+  description
+} = require('../../package')
+
+// const lokuswpSidebar = require('./sidebars/lokuswp');
+// const lwdonationSidebar = require('./sidebars/lwdonation');
+// const lwcommerceSidebar = require('./sidebars/lwcommerce');
 
 module.exports = {
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
-  title: 'Vuepress Docs Boilerplate',
+  title: 'LokusWP Developer',
+  base: '/developer/',
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
-  description: description,
+  description: "Belajar cara buat plugin WordPress dan Addon LokusWP",
 
   /**
    * Extra tags to be injected to the page HTML `<head>`
@@ -16,9 +23,18 @@ module.exports = {
    * ref：https://v1.vuepress.vuejs.org/config/#head
    */
   head: [
-    ['meta', { name: 'theme-color', content: '#3eaf7c' }],
-    ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
-    ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }]
+    ['meta', {
+      name: 'theme-color',
+      content: '#121314'
+    }],
+    ['meta', {
+      name: 'apple-mobile-web-app-capable',
+      content: 'yes'
+    }],
+    ['meta', {
+      name: 'apple-mobile-web-app-status-bar-style',
+      content: 'black'
+    }]
   ],
 
   /**
@@ -27,44 +43,87 @@ module.exports = {
    * ref：https://v1.vuepress.vuejs.org/theme/default-theme-config.html
    */
   themeConfig: {
-    repo: '',
-    editLinks: false,
-    docsDir: '',
-    editLinkText: '',
-    lastUpdated: false,
-    nav: [
-      {
-        text: 'Guide',
-        link: '/guide/',
+    repo: 'lokuswp/developer',
+    // Customising the header label
+    // Defaults to "GitHub"/"GitLab"/"Bitbucket" depending on `themeConfig.repo`
+    repoLabel: 'Kontribusi',
+    editLinks: true,
+    docsDir: 'src',
+    editLinkText: true,
+    editLinkText: 'Edit halaman ini melalui GitHub',
+    lastUpdated: true,
+    displayAllHeaders: true,
+    smoothScroll: true,
+    search: true,
+    nav: [{
+        text: 'LokusWP',
+        link: '/lokuswp/',
       },
       {
-        text: 'Config',
-        link: '/config/'
+        text: 'LWCommerce',
+        link: '/lwcommerce/'
       },
       {
-        text: 'VuePress',
-        link: 'https://v1.vuepress.vuejs.org'
+        text: 'LWDonation',
+        link: '/lwdonation/'
       }
     ],
-    sidebar: {
-      '/guide/': [
-        {
-          title: 'Guide',
-          collapsable: false,
-          children: [
-            '',
-            'using-vue',
-          ]
-        }
-      ],
-    }
+    // sidebar: {
+    //   '/lokuswp/': lokuswpSidebar,
+    //   '/lwdonation/': lwdonationSidebar,
+    //   '/lwcommerce/': lwcommerceSidebar,
+    // }
   },
 
   /**
-   * Apply plugins，ref：https://v1.vuepress.vuejs.org/zh/plugin/
+   * Markdown rules.
+   * 
+   * Ref：https://v1.vuepress.vuejs.org/config/#markdown
+   */
+  markdown: {
+    lineNumbers: true,
+    toc: true
+  },
+
+  /**
+   * Apply vue plugins.
+   * 
+   * Ref：https://v1.vuepress.vuejs.org/plugin/
    */
   plugins: [
-    '@vuepress/plugin-back-to-top',
-    '@vuepress/plugin-medium-zoom',
+    [
+      '@vuepress/pwa',
+      {
+        serviceWorker: true,
+        updatePopup: {
+          message: 'New content is available.',
+          buttonText: 'Refresh'
+        }
+      }
+    ],
+    [
+      'vuepress-plugin-clean-urls',
+      {
+        normalSuffix: '/',
+        indexSuffix: '/',
+        notFoundPath: '/404.html',
+      },
+    ],
+    [
+      'vuepress-plugin-seo',
+      {
+        siteTitle: (_, $site) => $site.title,
+        title: $page => $page.title,
+        description: $page => $page.frontmatter.description,
+        author: (_, $site) => $site.themeConfig.author,
+        tags: $page => $page.frontmatter.tags,
+        twitterCard: _ => 'summary_large_image',
+        type: $page => ['articles', 'posts', 'blog'].some(folder => $page.regularPath.startsWith('/' + folder)) ? 'article' : 'website',
+        url: (_, $site, path) => ($site.themeConfig.domain || '') + path,
+        image: () => 'https://avatars.githubusercontent.com/u/47606894',
+        publishedAt: $page => $page.frontmatter.date && new Date($page.frontmatter.date),
+        modifiedAt: $page => $page.lastUpdated && new Date($page.lastUpdated),
+      }
+    ]
   ]
 }
